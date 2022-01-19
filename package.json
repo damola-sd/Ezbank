@@ -1,0 +1,20 @@
+{
+  "name": "ezbank-gicqxy",
+  "version": "1.0.0",
+  "description": "Fake bank for fake customers",
+  "main": "index.js",
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://eztoned-limit-dsrrkw@git.codesubmit.io/eztoned-limited/ezbank-gicqxy"
+  },
+  "keywords": [
+    "Bank",
+    "FinTech",
+    "Test"
+  ],
+  "author": "Damola Adewunmi",
+  "license": "MIT"
+}
