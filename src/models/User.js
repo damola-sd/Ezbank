@@ -11,12 +11,19 @@ let user = new Schema({
   email: {
     type: String,
   },
+  password: { type: String, select: false },
   phone: {
     type: String,
   },
   address: {
     type: String,
   },
+});
+
+user.index({
+  first_name: "text",
+  last_name: "text",
+  email: "text",
 });
 
 module.exports = mongoose.model("User", user);

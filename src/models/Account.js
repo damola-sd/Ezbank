@@ -7,7 +7,6 @@ let accountDetails = new Schema(
     account_number: String,
     balance: {
       type: Number,
-      default: 1000,
     },
     account_owner: { type: Schema.Types.ObjectId, ref: "User" },
     transaction_history: [
