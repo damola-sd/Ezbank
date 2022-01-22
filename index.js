@@ -18,6 +18,14 @@ app.get("/", (req, res) => {
 
 app.use("/api", apiRouter);
 
+app.use((err, req, res, next) => {
+  if (err) {
+    res.status(400).send({ msg: "Invalid Request", code: err.message });
+  } else {
+    next();
+  }
+});
+
 app.all("*", (req, res) => {
   res.status(404).json({
     message: "This endpoint doesn't exist",

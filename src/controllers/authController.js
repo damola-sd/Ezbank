@@ -1,70 +1,47 @@
 const User = require("../models/User");
 const Bcrypt = require("bcryptjs");
 const TokenGenerator = require("../helpers/generateToken");
+const yup = require("yup");
 
-exports.register = async function (req, res) {
+// const userRegisterSchema = require("../helpers/validators");
+
+userRegisterSchema = yup.object().shape({
+  first_name: yup.string().required(),
+  last_name: yup.string().required(),
+  phone: yup.string(),
+  email: yup.string().email().required(),
+  phone: yup.string(),
+});
+
+exports.register = async function (req, res, next) {
   if (req.method == "POST") {
     let email = req.body.email;
     email = email.toLowerCase();
-
-    User.findOne({ email: email }).then((found) => {
-      if (found) {
-        res.status(401).send({
+    try {
+      await userRegisterSchema.validate(req.body);
+      const oldUser = await User.findOne({ email: email });
+      if (oldUser) {
+        return res.status(401).send({
+          status: 403,
+          message: "A user with this email already exists",
           success: false,
-          message:
-            "A user with this email already exist, did you forget your password?",
-        });
-      } else {
-        //var passwordHash = Bcrypt.hashSync(req.body.password , 10)
-        Bcrypt.hash(req.body.password, 10, function (error, passwordHash) {
-          if (error) {
-            res.send({ status: 500, error: error });
-          } else {
-            new User({
-              first_name: req.body.first_name,
-              last_name: req.body.last_name,
-              email: email,
-              phone: req.body.phone,
-              password: passwordHash,
-            }).save(async function (error, user) {
-              if (error) {
-                res.send({
-                  status: 401,
-                  success: false,
-                  message: error,
-                });
-              } else {
-                TokenGenerator.generate_token({
-                  email: user.email,
-                  id: user._id,
-                })
-                  .then((token) => {
-                    //set a session with the token generated
-                    req.session.token = token;
-
-                    //Remove the password field from the object sent back
-                    user.password = undefined;
-
-                    res.send({
-                      status: 200,
-                      success: true,
-                      user: user,
-                      token: token,
-                      message: "Registration Successful",
-                    });
-                  })
-                  .catch((error) => {
-                    res.send({
-                      status: 500,
-                      success: false,
-                      error: error,
-                    });
-                  });
-              }
-            });
-          }
         });
       }
-    });
+      const newUser = await User.create({
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        phone: req.body.phone,
+        address: req.body.address,
+      });
+      if (newUser) {
+        return res.status(200).send({
+          data: newUser,
+          success: true,
+          message: "Registration Successful",
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
   }
 };
