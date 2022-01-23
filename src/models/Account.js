@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 let accountDetails = new Schema(
   {
     account_name: String,
-    account_number: String,
+    account_number: { type: String, unique: true },
     balance: {
       type: Number,
     },
