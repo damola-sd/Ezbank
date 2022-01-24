@@ -78,3 +78,35 @@ exports.transfer = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.getBalance = async function (req, res, next) {
+  try {
+    const { account_number } = req.body;
+    const accountBalance = await Account.findOne({ account_number });
+    if (accountBalance) {
+      return res.status(200).send({
+        success: true,
+        message: "Account balance fetched",
+        data: accountBalance.balance,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getTransactionHistory = async function (req, res, next) {
+  try {
+    const { account_number } = req.body;
+    const accountBalance = await Account.findOne({ account_number });
+    if (accountBalance) {
+      return res.status(200).send({
+        success: true,
+        message: "Account balance fetched",
+        data: accountBalance.transaction_history,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
