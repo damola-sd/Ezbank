@@ -5,11 +5,12 @@ const yup = require("yup");
 const validator = require("../helpers/validators");
 
 exports.register = async function (req, res, next) {
-  if (req.method == "POST") {
-    let email = req.body.email;
-    email = email.toLowerCase();
-    try {
-      await validator.userRegisterSchema.validate(req.body);
+  try {
+    await validator.userRegisterSchema.validate(req.body);
+    if (req.method == "POST") {
+      let email = req.body.email;
+      email = email.toLowerCase();
+
       const oldUser = await User.findOne({ email: email });
       if (oldUser) {
         return res.status(401).send({
@@ -32,8 +33,8 @@ exports.register = async function (req, res, next) {
           message: "Registration Successful",
         });
       }
-    } catch (error) {
-      next(error);
     }
+  } catch (error) {
+    next(error);
   }
 };

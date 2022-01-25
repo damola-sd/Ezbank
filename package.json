@@ -4,8 +4,8 @@
   "description": "Fake bank for fake customers",
   "main": "index.js",
   "scripts": {
-    "test": "none",
-    "dev": "nodemon index.ts"
+    "test": "jest --detectOpenHandles --coverage --forceExit",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +26,15 @@
     "express": "^4.17.2",
     "helmet": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
+    "mongodb-memory-server": "^8.2.0",
     "mongoose": "^6.1.7",
     "monk": "^7.3.4",
     "nodemon": "^2.0.15",
+    "supertest": "^6.2.2",
     "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^27.4.7"
   }
 }

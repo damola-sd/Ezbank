@@ -4,8 +4,6 @@ const cors = require("cors");
 const app = express();
 const apiRouter = require("./src/routes");
 
-const db = require("./src/db");
-
 const port = process.env.PORT || 8080;
 
 app.use(helmet());
@@ -32,7 +30,4 @@ app.all("*", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`server started at http://localhost:${port} `);
-  db.connection_db();
-});
+module.exports = app;

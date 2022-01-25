@@ -3,6 +3,7 @@ let User = require("../models/User");
 let Account = require("../models/Account");
 const TransactionHistory = require("../models/transactionHistory");
 const generateCode = require("../helpers/generateAccountNumber");
+const validator = require("../helpers/validators");
 
 exports.createAccount = async function (req, res, next) {
   try {
@@ -26,6 +27,7 @@ exports.createAccount = async function (req, res, next) {
 
 exports.transfer = async function (req, res, next) {
   try {
+    await validator.transferDetailsSchema.validate(req.body);
     const { amount, from, to } = req.body;
     const sendingAccount = await Account.findOne({
       account_number: from,
